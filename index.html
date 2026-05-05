@@ -1,0 +1,917 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Font Compare</title>
+  <style>
+    /* ── Reset & base ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f13;
+      --surface: #1a1a22;
+      --border: #2e2e3e;
+      --text: #e2e2f0;
+      --muted: #888;
+      --accent: #7c6af7;
+      --color-a: #ff4d6d;
+      --color-b: #4dc9ff;
+      --radius: 10px;
+      --gap: 1.25rem;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Header ── */
+    header {
+      padding: 1.5rem var(--gap);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    header h1 {
+      font-size: 1.35rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    header .badge {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: var(--accent);
+      color: #fff;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* ── Main layout ── */
+    main {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 0;
+    }
+
+    /* ── Sidebar ── */
+    aside {
+      background: var(--surface);
+      border-right: 1px solid var(--border);
+      overflow-y: auto;
+      padding: var(--gap);
+      display: flex;
+      flex-direction: column;
+      gap: var(--gap);
+    }
+
+    .section-title {
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+
+    /* ── Font card ── */
+    .font-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.875rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+
+    .font-card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .font-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .font-dot-a { background: var(--color-a); }
+    .font-dot-b { background: var(--color-b); }
+    .font-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    label {
+      display: block;
+      font-size: 0.72rem;
+      color: var(--muted);
+      margin-bottom: 3px;
+    }
+
+    input[type="text"],
+    input[type="url"],
+    textarea,
+    select {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text);
+      font-size: 0.8rem;
+      padding: 0.45rem 0.6rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    input[type="text"]:focus,
+    input[type="url"]:focus,
+    textarea:focus,
+    select:focus {
+      border-color: var(--accent);
+    }
+    textarea { resize: vertical; min-height: 60px; }
+
+    /* ── Range sliders ── */
+    .slider-row {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    .slider-row input[type="range"] {
+      flex: 1;
+      accent-color: var(--accent);
+      cursor: pointer;
+    }
+    .slider-val {
+      font-size: 0.75rem;
+      color: var(--muted);
+      min-width: 38px;
+      text-align: right;
+    }
+
+    /* ── Shared settings card ── */
+    .settings-card {
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.875rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.625rem;
+    }
+
+    .two-col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    /* ── Buttons ── */
+    .btn-row {
+      display: flex;
+      gap: 0.5rem;
+    }
+    button {
+      cursor: pointer;
+      border: none;
+      border-radius: 7px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      transition: opacity 0.15s;
+    }
+    button:hover { opacity: 0.85; }
+    .btn-primary {
+      background: var(--accent);
+      color: #fff;
+      flex: 1;
+    }
+    .btn-ghost {
+      background: var(--border);
+      color: var(--text);
+    }
+
+    /* ── Error / status ── */
+    .status-bar {
+      font-size: 0.72rem;
+      border-radius: 6px;
+      padding: 0.35rem 0.6rem;
+      display: none;
+    }
+    .status-bar.error { background: #3d1414; color: #ff8080; display: block; }
+    .status-bar.ok    { background: #143d1d; color: #80ff9a; display: block; }
+
+    /* ── Preview area ── */
+    .preview-wrap {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    .preview-toolbar {
+      padding: 0.6rem var(--gap);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: 0.78rem;
+      flex-shrink: 0;
+    }
+    .preview-toolbar .legend {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+    .swatch {
+      width: 12px; height: 12px;
+      border-radius: 3px;
+      display: inline-block;
+    }
+    .swatch-a { background: var(--color-a); }
+    .swatch-b { background: var(--color-b); }
+
+    .preview-toolbar input[type="range"] {
+      width: 100px;
+      accent-color: var(--accent);
+    }
+    .preview-toolbar .sep {
+      color: var(--border);
+    }
+
+    /* ── Preview canvas ── */
+    #preview {
+      flex: 1;
+      overflow: auto;
+      padding: 3rem;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      background: #09090d;
+    }
+
+    .preview-inner {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .preview-text {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%;
+      white-space: pre-wrap;
+      word-break: break-word;
+      line-height: inherit;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .preview-text-a {
+      color: var(--color-a);
+    }
+    .preview-text-b {
+      color: var(--color-b);
+    }
+
+    /* spacer to give the .preview-inner its height */
+    .preview-sizer {
+      visibility: hidden;
+      white-space: pre-wrap;
+      word-break: break-word;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 768px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+      aside {
+        border-right: none;
+        border-bottom: 1px solid var(--border);
+      }
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Font Compare</h1>
+  <span class="badge">alpha</span>
+</header>
+
+<main>
+  <!-- ── Sidebar ── -->
+  <aside>
+
+    <!-- Font A -->
+    <div>
+      <p class="section-title">Font A</p>
+      <div class="font-card">
+        <div class="font-card-header">
+          <span class="font-dot font-dot-a"></span>
+          <span class="font-label" style="color:var(--color-a)">Font A</span>
+        </div>
+        <div>
+          <label for="urlA">Font URL / name</label>
+          <input id="urlA" type="url"
+            placeholder="https://fonts.googleapis.com/css2?family=…  or  .woff2 URL" />
+        </div>
+        <div id="statusA" class="status-bar"></div>
+      </div>
+    </div>
+
+    <!-- Font B -->
+    <div>
+      <p class="section-title">Font B</p>
+      <div class="font-card">
+        <div class="font-card-header">
+          <span class="font-dot font-dot-b"></span>
+          <span class="font-label" style="color:var(--color-b)">Font B</span>
+        </div>
+        <div>
+          <label for="urlB">Font URL / name</label>
+          <input id="urlB" type="url"
+            placeholder="https://fonts.googleapis.com/css2?family=…  or  .woff2 URL" />
+        </div>
+        <div id="statusB" class="status-bar"></div>
+      </div>
+    </div>
+
+    <!-- Load button -->
+    <div class="btn-row">
+      <button class="btn-primary" id="loadBtn">Load fonts</button>
+      <button class="btn-ghost" id="swapBtn" title="Swap fonts">⇅</button>
+    </div>
+
+    <!-- Typography settings -->
+    <div>
+      <p class="section-title">Typography</p>
+      <div class="settings-card">
+
+        <div>
+          <label for="fontSize">Font size</label>
+          <div class="slider-row">
+            <input type="range" id="fontSize" min="8" max="200" value="64" />
+            <span class="slider-val" id="fontSizeVal">64px</span>
+          </div>
+        </div>
+
+        <div>
+          <label for="fontWeight">Font weight</label>
+          <div class="slider-row">
+            <input type="range" id="fontWeight" min="100" max="900" step="100" value="400" />
+            <span class="slider-val" id="fontWeightVal">400</span>
+          </div>
+        </div>
+
+        <div>
+          <label for="lineHeight">Line height</label>
+          <div class="slider-row">
+            <input type="range" id="lineHeight" min="50" max="250" value="120" />
+            <span class="slider-val" id="lineHeightVal">1.2</span>
+          </div>
+        </div>
+
+        <div>
+          <label for="letterSpacing">Letter spacing</label>
+          <div class="slider-row">
+            <input type="range" id="letterSpacing" min="-10" max="30" value="0" />
+            <span class="slider-val" id="letterSpacingVal">0em</span>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <label for="fontStyle">Style</label>
+            <select id="fontStyle">
+              <option value="normal">Normal</option>
+              <option value="italic">Italic</option>
+              <option value="oblique">Oblique</option>
+            </select>
+          </div>
+          <div>
+            <label for="textTransform">Transform</label>
+            <select id="textTransform">
+              <option value="none">None</option>
+              <option value="uppercase">UPPER</option>
+              <option value="lowercase">lower</option>
+              <option value="capitalize">Title</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="two-col">
+          <div>
+            <label for="fontVariant">Variant</label>
+            <select id="fontVariant">
+              <option value="normal">Normal</option>
+              <option value="small-caps">Small caps</option>
+            </select>
+          </div>
+          <div>
+            <label for="textAlign">Alignment</label>
+            <select id="textAlign">
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Sample text -->
+    <div>
+      <p class="section-title">Sample text</p>
+      <div class="settings-card">
+        <div>
+          <label for="sampleText">Text to display</label>
+          <textarea id="sampleText" rows="4">The quick brown fox
+jumps over the lazy dog
+0123456789
+ABCDEFGHIJKLMNOPQRSTUVWXYZ</textarea>
+        </div>
+        <div class="btn-row">
+          <button class="btn-ghost" style="flex:1" id="presetAlpha">ABC</button>
+          <button class="btn-ghost" style="flex:1" id="presetNum">123</button>
+          <button class="btn-ghost" style="flex:1" id="presetPangram">Pangram</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Overlay settings -->
+    <div>
+      <p class="section-title">Overlay</p>
+      <div class="settings-card">
+        <div>
+          <label for="opacityA">Opacity — Font A</label>
+          <div class="slider-row">
+            <input type="range" id="opacityA" min="0" max="100" value="70" />
+            <span class="slider-val" id="opacityAVal">70%</span>
+          </div>
+        </div>
+        <div>
+          <label for="opacityB">Opacity — Font B</label>
+          <div class="slider-row">
+            <input type="range" id="opacityB" min="0" max="100" value="70" />
+            <span class="slider-val" id="opacityBVal">70%</span>
+          </div>
+        </div>
+        <div class="two-col">
+          <div>
+            <label for="colorA">Color A</label>
+            <input type="color" id="colorA" value="#ff4d6d"
+              style="width:100%;height:34px;padding:2px 4px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer;" />
+          </div>
+          <div>
+            <label for="colorB">Color B</label>
+            <input type="color" id="colorB" value="#4dc9ff"
+              style="width:100%;height:34px;padding:2px 4px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer;" />
+          </div>
+        </div>
+        <div>
+          <label for="bgColor">Background</label>
+          <input type="color" id="bgColor" value="#09090d"
+            style="width:100%;height:34px;padding:2px 4px;border-radius:6px;border:1px solid var(--border);background:var(--surface);cursor:pointer;" />
+        </div>
+        <div>
+          <label for="blendMode">Blend mode</label>
+          <select id="blendMode">
+            <option value="screen" selected>Screen</option>
+            <option value="normal">Normal (stacked)</option>
+            <option value="multiply">Multiply</option>
+            <option value="difference">Difference</option>
+            <option value="overlay">Overlay</option>
+            <option value="color-dodge">Color dodge</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+  </aside>
+
+  <!-- ── Preview ── -->
+  <section class="preview-wrap">
+    <div class="preview-toolbar">
+      <span class="legend">
+        <span class="swatch swatch-a" id="swatchA"></span>
+        <span id="nameA">Font A</span>
+      </span>
+      <span class="legend">
+        <span class="swatch swatch-b" id="swatchB"></span>
+        <span id="nameB">Font B</span>
+      </span>
+      <span class="sep">|</span>
+      <span id="previewSizeLabel" style="color:var(--muted)">64px</span>
+    </div>
+
+    <div id="preview">
+      <div class="preview-inner" id="previewInner">
+        <div class="preview-sizer"  id="previewSizer"></div>
+        <div class="preview-text preview-text-a" id="previewA"></div>
+        <div class="preview-text preview-text-b" id="previewB"></div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script>
+/* ─────────────────────────────────────────────────────────────
+   State
+───────────────────────────────────────────────────────────── */
+const state = {
+  urlA: '',
+  urlB: '',
+  fontFamilyA: 'serif',
+  fontFamilyB: 'serif',
+  fontSize: 64,
+  fontWeight: 400,
+  lineHeight: 1.2,
+  letterSpacing: 0,
+  fontStyle: 'normal',
+  textTransform: 'none',
+  fontVariant: 'normal',
+  textAlign: 'left',
+  opacityA: 0.7,
+  opacityB: 0.7,
+  colorA: '#ff4d6d',
+  colorB: '#4dc9ff',
+  bgColor: '#09090d',
+  blendMode: 'screen',
+  text: '',
+};
+
+let fontCounter = 0; // unique id for @font-face names
+const loadedStylesheets = new Map(); // url → link element
+
+/* ─────────────────────────────────────────────────────────────
+   DOM refs
+───────────────────────────────────────────────────────────── */
+const $ = id => document.getElementById(id);
+
+const urlAEl        = $('urlA');
+const urlBEl        = $('urlB');
+const statusAEl     = $('statusA');
+const statusBEl     = $('statusB');
+const loadBtn       = $('loadBtn');
+const swapBtn       = $('swapBtn');
+const sampleTextEl  = $('sampleText');
+const previewAEl    = $('previewA');
+const previewBEl    = $('previewB');
+const previewSizerEl= $('previewSizer');
+const previewInner  = $('previewInner');
+const previewEl     = $('preview');
+const nameAEl       = $('nameA');
+const nameBEl       = $('nameB');
+const swatchAEl     = $('swatchA');
+const swatchBEl     = $('swatchB');
+const previewSizeLabel = $('previewSizeLabel');
+
+/* ─────────────────────────────────────────────────────────────
+   Slider wiring helper
+───────────────────────────────────────────────────────────── */
+function wireSlider(id, valId, fmt, onChange) {
+  const slider = $(id);
+  const valEl  = $(valId);
+  slider.addEventListener('input', () => {
+    valEl.textContent = fmt(Number(slider.value));
+    onChange(Number(slider.value));
+  });
+}
+
+wireSlider('fontSize',      'fontSizeVal',      v => v + 'px', v => {
+  state.fontSize = v;
+  previewSizeLabel.textContent = v + 'px';
+  applyPreviewStyles();
+});
+wireSlider('fontWeight',    'fontWeightVal',    v => String(v), v => {
+  state.fontWeight = v;
+  applyPreviewStyles();
+});
+wireSlider('lineHeight',    'lineHeightVal',    v => (v/100).toFixed(2), v => {
+  state.lineHeight = v / 100;
+  applyPreviewStyles();
+});
+wireSlider('letterSpacing', 'letterSpacingVal', v => (v/100).toFixed(2) + 'em', v => {
+  state.letterSpacing = v / 100;
+  applyPreviewStyles();
+});
+wireSlider('opacityA', 'opacityAVal', v => v + '%', v => {
+  state.opacityA = v / 100;
+  applyPreviewStyles();
+});
+wireSlider('opacityB', 'opacityBVal', v => v + '%', v => {
+  state.opacityB = v / 100;
+  applyPreviewStyles();
+});
+
+/* Select / color wiring */
+['fontStyle','textTransform','fontVariant','textAlign','blendMode'].forEach(id => {
+  $(id).addEventListener('change', e => {
+    state[id] = e.target.value;
+    applyPreviewStyles();
+  });
+});
+
+$('colorA').addEventListener('input', e => {
+  state.colorA = e.target.value;
+  swatchAEl.style.background = e.target.value;
+  applyPreviewStyles();
+});
+$('colorB').addEventListener('input', e => {
+  state.colorB = e.target.value;
+  swatchBEl.style.background = e.target.value;
+  applyPreviewStyles();
+});
+$('bgColor').addEventListener('input', e => {
+  state.bgColor = e.target.value;
+  previewEl.style.background = e.target.value;
+});
+
+/* Sample text */
+sampleTextEl.addEventListener('input', () => {
+  state.text = sampleTextEl.value;
+  updateText();
+});
+
+/* Presets */
+$('presetAlpha').addEventListener('click', () => {
+  sampleTextEl.value =
+    'ABCDEFGHIJKLM\nNOPQRSTUVWXYZ\nabcdefghijklm\nnopqrstuvwxyz';
+  state.text = sampleTextEl.value;
+  updateText();
+});
+$('presetNum').addEventListener('click', () => {
+  sampleTextEl.value = `0 1 2 3 4 5 6 7 8 9\n!@#$%^&*()_+-=[]{}|;':",./<>?`;
+  state.text = sampleTextEl.value;
+  updateText();
+});
+$('presetPangram').addEventListener('click', () => {
+  sampleTextEl.value = 'The quick brown fox\njumps over the lazy dog.';
+  state.text = sampleTextEl.value;
+  updateText();
+});
+
+/* Swap */
+swapBtn.addEventListener('click', () => {
+  const tmpUrl = urlAEl.value;
+  urlAEl.value = urlBEl.value;
+  urlBEl.value = tmpUrl;
+  const tmpFamily = state.fontFamilyA;
+  state.fontFamilyA = state.fontFamilyB;
+  state.fontFamilyB = tmpFamily;
+  nameAEl.textContent = 'Font A';
+  nameBEl.textContent = 'Font B';
+  applyPreviewStyles();
+});
+
+/* ─────────────────────────────────────────────────────────────
+   Font loading
+───────────────────────────────────────────────────────────── */
+
+/**
+ * Allow only http: and https: URLs to prevent javascript:/data: injection.
+ */
+function isSafeUrl(url) {
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch (_) {
+    return false;
+  }
+}
+
+/**
+ * Sanitize a string for safe use inside a CSS single-quoted string value
+ * by escaping backslashes, single quotes, and stripping newlines.
+ */
+function cssSingleQuoteEscape(str) {
+  return str.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/[\r\n]/g, '');
+}
+
+/**
+ * Detect if a URL points directly to a font file.
+ */
+function isFontFile(url) {
+  return /\.(woff2?|ttf|otf|eot)(\?.*)?$/i.test(url);
+}
+
+/**
+ * Detect if a URL is a CSS stylesheet (Google Fonts, Bunny Fonts, Adobe Fonts, etc.)
+ */
+function isStylesheet(url) {
+  // Google Fonts, Bunny Fonts, Adobe Fonts CDN, or any URL ending in .css
+  return /fonts\.(googleapis|bunny|adobe)\.com/i.test(url)
+      || /use\.typekit\.net/i.test(url)
+      || /\.css(\?.*)?$/i.test(url);
+}
+
+/**
+ * Given a raw value from the input, decide how to load the font and
+ * return a CSS font-family string to use.
+ *
+ * Strategy:
+ *   • CSS stylesheet URL → inject <link>, extract family from URL heuristic
+ *   • Direct font-file URL → create @font-face, return generated family name
+ *   • Anything else → treat as a CSS font-family name (may be a system font,
+ *     or a previously loaded Google Fonts family)
+ */
+async function resolveFont(url, statusEl) {
+  url = url.trim();
+
+  if (!url) {
+    setStatus(statusEl, '', '');
+    return 'serif';
+  }
+
+  // ── Direct font file ──────────────────────────────────────
+  if (isFontFile(url)) {
+    if (!isSafeUrl(url)) {
+      setStatus(statusEl, 'error', 'Only http/https URLs are supported');
+      return 'serif';
+    }
+    const family = `fc-font-${++fontCounter}`;
+    const fmt = /\.woff2(\?.*)?$/i.test(url) ? 'woff2'
+              : /\.woff(\?.*)?$/i.test(url)  ? 'woff'
+              : /\.ttf(\?.*)?$/i.test(url)   ? 'truetype'
+              : /\.otf(\?.*)?$/i.test(url)   ? 'opentype'
+              : /\.eot(\?.*)?$/i.test(url)   ? 'embedded-opentype'
+              : 'truetype';
+
+    const safeUrl    = cssSingleQuoteEscape(url);
+    const safeFamily = cssSingleQuoteEscape(family);
+    const css = `@font-face { font-family: '${safeFamily}'; src: url('${safeUrl}') format('${fmt}'); font-weight: 100 900; font-display: swap; }`;
+    injectStyle(css, `fc-face-${family}`);
+
+    try {
+      await document.fonts.load(`16px '${safeFamily}'`);
+      setStatus(statusEl, 'ok', 'Font loaded ✓');
+    } catch(e) {
+      setStatus(statusEl, 'error', 'Could not load font file');
+    }
+    return family;
+  }
+
+  // ── Stylesheet / CDN ──────────────────────────────────────
+  if (isStylesheet(url) || url.startsWith('http')) {
+    if (!isSafeUrl(url)) {
+      setStatus(statusEl, 'error', 'Only http/https URLs are supported');
+      return 'serif';
+    }
+    // Inject <link> tag (idempotent — look up by URL in the Map)
+    if (!loadedStylesheets.has(url)) {
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = url;
+      document.head.appendChild(link);
+      loadedStylesheets.set(url, link);
+    }
+
+    // Guess the family name from the URL
+    const family = guessFamilyFromUrl(url);
+    setStatus(statusEl, 'ok', `Stylesheet loaded — using family: "${family}"`);
+    return family;
+  }
+
+  // ── Plain family name ─────────────────────────────────────
+  setStatus(statusEl, 'ok', `Using font family: "${url}"`);
+  return url;
+}
+
+/**
+ * Try to extract the font family name from a common CDN URL.
+ * Falls back to 'serif' if not determinable.
+ */
+function guessFamilyFromUrl(url) {
+  // Google / Bunny Fonts: ?family=Roboto:wght@...  or  ?family=Open+Sans
+  const familyParam = url.match(/[?&]family=([^:&|]+)/i);
+  if (familyParam) {
+    return decodeURIComponent(familyParam[1]).replace(/\+/g, ' ').split(',')[0].trim();
+  }
+
+  // Adobe / Typekit: use.typekit.net/abc1234.css — no family name in URL
+  if (/typekit\.net/i.test(url)) return 'sans-serif';
+
+  // .css file: try to get the filename without extension
+  const cssFile = url.match(/\/([^/?#]+)\.css/i);
+  if (cssFile) return cssFile[1].replace(/[-_]/g, ' ');
+
+  return 'sans-serif';
+}
+
+function injectStyle(css, id) {
+  let el = document.getElementById(id);
+  if (!el) {
+    el = document.createElement('style');
+    el.id = id;
+    document.head.appendChild(el);
+  }
+  el.textContent = css;
+}
+
+function setStatus(el, type, msg) {
+  el.className = 'status-bar' + (type ? ' ' + type : '');
+  el.textContent = msg;
+  el.style.display = msg ? 'block' : 'none';
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Load button
+───────────────────────────────────────────────────────────── */
+loadBtn.addEventListener('click', async () => {
+  loadBtn.disabled = true;
+  loadBtn.textContent = 'Loading…';
+
+  try {
+    const [famA, famB] = await Promise.all([
+      resolveFont(urlAEl.value, statusAEl),
+      resolveFont(urlBEl.value, statusBEl),
+    ]);
+    state.fontFamilyA = famA;
+    state.fontFamilyB = famB;
+    nameAEl.textContent = famA;
+    nameBEl.textContent = famB;
+    applyPreviewStyles();
+  } finally {
+    loadBtn.disabled = false;
+    loadBtn.textContent = 'Load fonts';
+  }
+});
+
+/* ─────────────────────────────────────────────────────────────
+   Preview rendering
+───────────────────────────────────────────────────────────── */
+function sharedTextStyle() {
+  return {
+    fontSize:      state.fontSize + 'px',
+    fontWeight:    state.fontWeight,
+    lineHeight:    state.lineHeight,
+    letterSpacing: state.letterSpacing + 'em',
+    fontStyle:     state.fontStyle,
+    textTransform: state.textTransform,
+    fontVariant:   state.fontVariant,
+    textAlign:     state.textAlign,
+  };
+}
+
+function applyStyle(el, extra) {
+  const s = sharedTextStyle();
+  Object.assign(el.style, s, extra);
+}
+
+/** Build a CSS font-family value with a safe serif fallback. */
+function fontFamilyValue(name) {
+  return `'${cssSingleQuoteEscape(name)}', serif`;
+}
+
+function applyPreviewStyles() {
+  const shared = sharedTextStyle();
+
+  // sizer (invisible, drives container height)
+  Object.assign(previewSizerEl.style, shared, { fontFamily: fontFamilyValue(state.fontFamilyA) });
+
+  // overlay A
+  applyStyle(previewAEl, {
+    fontFamily:  fontFamilyValue(state.fontFamilyA),
+    color:       state.colorA,
+    opacity:     state.opacityA,
+    mixBlendMode: state.blendMode,
+  });
+
+  // overlay B
+  applyStyle(previewBEl, {
+    fontFamily:  fontFamilyValue(state.fontFamilyB),
+    color:       state.colorB,
+    opacity:     state.opacityB,
+    mixBlendMode: state.blendMode,
+  });
+
+  previewEl.style.background = state.bgColor;
+}
+
+function updateText() {
+  const text = state.text;
+  previewAEl.textContent     = text;
+  previewBEl.textContent     = text;
+  previewSizerEl.textContent = text;
+}
+
+/* ─────────────────────────────────────────────────────────────
+   Init
+───────────────────────────────────────────────────────────── */
+state.text = sampleTextEl.value;
+updateText();
+applyPreviewStyles();
+</script>
+</body>
+</html>
