@@ -326,6 +326,71 @@
             placeholder="https://fonts.googleapis.com/css2?family=…  or  .woff2 URL" />
         </div>
         <div id="statusA" class="status-bar"></div>
+
+        <div>
+          <label for="fontSizeA">Font size</label>
+          <div class="slider-row">
+            <input type="range" id="fontSizeA" min="8" max="200" value="64" />
+            <span class="slider-val" id="fontSizeAVal">64px</span>
+          </div>
+        </div>
+        <div>
+          <label for="fontWeightA">Font weight</label>
+          <div class="slider-row">
+            <input type="range" id="fontWeightA" min="100" max="900" step="100" value="400" />
+            <span class="slider-val" id="fontWeightAVal">400</span>
+          </div>
+        </div>
+        <div>
+          <label for="lineHeightA">Line height</label>
+          <div class="slider-row">
+            <input type="range" id="lineHeightA" min="50" max="250" value="120" />
+            <span class="slider-val" id="lineHeightAVal">1.20</span>
+          </div>
+        </div>
+        <div>
+          <label for="letterSpacingA">Letter spacing</label>
+          <div class="slider-row">
+            <input type="range" id="letterSpacingA" min="-10" max="30" value="0" />
+            <span class="slider-val" id="letterSpacingAVal">0.00em</span>
+          </div>
+        </div>
+        <div class="two-col">
+          <div>
+            <label for="fontStyleA">Style</label>
+            <select id="fontStyleA">
+              <option value="normal">Normal</option>
+              <option value="italic">Italic</option>
+              <option value="oblique">Oblique</option>
+            </select>
+          </div>
+          <div>
+            <label for="textTransformA">Transform</label>
+            <select id="textTransformA">
+              <option value="none">None</option>
+              <option value="uppercase">UPPER</option>
+              <option value="lowercase">lower</option>
+              <option value="capitalize">Title</option>
+            </select>
+          </div>
+        </div>
+        <div class="two-col">
+          <div>
+            <label for="fontVariantA">Variant</label>
+            <select id="fontVariantA">
+              <option value="normal">Normal</option>
+              <option value="small-caps">Small caps</option>
+            </select>
+          </div>
+          <div>
+            <label for="textAlignA">Alignment</label>
+            <select id="textAlignA">
+              <option value="left">Left</option>
+              <option value="center">Center</option>
+              <option value="right">Right</option>
+            </select>
+          </div>
+        </div>
       </div>
     </div>
 
@@ -343,64 +408,47 @@
             placeholder="https://fonts.googleapis.com/css2?family=…  or  .woff2 URL" />
         </div>
         <div id="statusB" class="status-bar"></div>
-      </div>
-    </div>
-
-    <!-- Load button -->
-    <div class="btn-row">
-      <button class="btn-primary" id="loadBtn">Load fonts</button>
-      <button class="btn-ghost" id="swapBtn" title="Swap fonts">⇅</button>
-    </div>
-
-    <!-- Typography settings -->
-    <div>
-      <p class="section-title">Typography</p>
-      <div class="settings-card">
 
         <div>
-          <label for="fontSize">Font size</label>
+          <label for="fontSizeB">Font size</label>
           <div class="slider-row">
-            <input type="range" id="fontSize" min="8" max="200" value="64" />
-            <span class="slider-val" id="fontSizeVal">64px</span>
+            <input type="range" id="fontSizeB" min="8" max="200" value="64" />
+            <span class="slider-val" id="fontSizeBVal">64px</span>
           </div>
         </div>
-
         <div>
-          <label for="fontWeight">Font weight</label>
+          <label for="fontWeightB">Font weight</label>
           <div class="slider-row">
-            <input type="range" id="fontWeight" min="100" max="900" step="100" value="400" />
-            <span class="slider-val" id="fontWeightVal">400</span>
+            <input type="range" id="fontWeightB" min="100" max="900" step="100" value="400" />
+            <span class="slider-val" id="fontWeightBVal">400</span>
           </div>
         </div>
-
         <div>
-          <label for="lineHeight">Line height</label>
+          <label for="lineHeightB">Line height</label>
           <div class="slider-row">
-            <input type="range" id="lineHeight" min="50" max="250" value="120" />
-            <span class="slider-val" id="lineHeightVal">1.2</span>
+            <input type="range" id="lineHeightB" min="50" max="250" value="120" />
+            <span class="slider-val" id="lineHeightBVal">1.20</span>
           </div>
         </div>
-
         <div>
-          <label for="letterSpacing">Letter spacing</label>
+          <label for="letterSpacingB">Letter spacing</label>
           <div class="slider-row">
-            <input type="range" id="letterSpacing" min="-10" max="30" value="0" />
-            <span class="slider-val" id="letterSpacingVal">0em</span>
+            <input type="range" id="letterSpacingB" min="-10" max="30" value="0" />
+            <span class="slider-val" id="letterSpacingBVal">0.00em</span>
           </div>
         </div>
-
         <div class="two-col">
           <div>
-            <label for="fontStyle">Style</label>
-            <select id="fontStyle">
+            <label for="fontStyleB">Style</label>
+            <select id="fontStyleB">
               <option value="normal">Normal</option>
               <option value="italic">Italic</option>
               <option value="oblique">Oblique</option>
             </select>
           </div>
           <div>
-            <label for="textTransform">Transform</label>
-            <select id="textTransform">
+            <label for="textTransformB">Transform</label>
+            <select id="textTransformB">
               <option value="none">None</option>
               <option value="uppercase">UPPER</option>
               <option value="lowercase">lower</option>
@@ -408,26 +456,30 @@
             </select>
           </div>
         </div>
-
         <div class="two-col">
           <div>
-            <label for="fontVariant">Variant</label>
-            <select id="fontVariant">
+            <label for="fontVariantB">Variant</label>
+            <select id="fontVariantB">
               <option value="normal">Normal</option>
               <option value="small-caps">Small caps</option>
             </select>
           </div>
           <div>
-            <label for="textAlign">Alignment</label>
-            <select id="textAlign">
+            <label for="textAlignB">Alignment</label>
+            <select id="textAlignB">
               <option value="left">Left</option>
               <option value="center">Center</option>
               <option value="right">Right</option>
             </select>
           </div>
         </div>
-
       </div>
+    </div>
+
+    <!-- Load button -->
+    <div class="btn-row">
+      <button class="btn-primary" id="loadBtn">Load fonts</button>
+      <button class="btn-ghost" id="swapBtn" title="Swap fonts">⇅</button>
     </div>
 
     <!-- Sample text -->
@@ -512,7 +564,7 @@ ABCDEFGHIJKLMNOPQRSTUVWXYZ</textarea>
         <span id="nameB">Font B</span>
       </span>
       <span class="sep">|</span>
-      <span id="previewSizeLabel" style="color:var(--muted)">64px</span>
+      <span id="previewSizeLabel" style="color:var(--muted)">64px / 64px</span>
     </div>
 
     <div id="preview">
@@ -534,14 +586,22 @@ const state = {
   urlB: '',
   fontFamilyA: 'serif',
   fontFamilyB: 'serif',
-  fontSize: 64,
-  fontWeight: 400,
-  lineHeight: 1.2,
-  letterSpacing: 0,
-  fontStyle: 'normal',
-  textTransform: 'none',
-  fontVariant: 'normal',
-  textAlign: 'left',
+  fontSizeA: 64,
+  fontSizeB: 64,
+  fontWeightA: 400,
+  fontWeightB: 400,
+  lineHeightA: 1.2,
+  lineHeightB: 1.2,
+  letterSpacingA: 0,
+  letterSpacingB: 0,
+  fontStyleA: 'normal',
+  fontStyleB: 'normal',
+  textTransformA: 'none',
+  textTransformB: 'none',
+  fontVariantA: 'normal',
+  fontVariantB: 'normal',
+  textAlignA: 'left',
+  textAlignB: 'left',
   opacityA: 0.7,
   opacityB: 0.7,
   colorA: '#ff4d6d',
@@ -589,21 +649,38 @@ function wireSlider(id, valId, fmt, onChange) {
   });
 }
 
-wireSlider('fontSize',      'fontSizeVal',      v => v + 'px', v => {
-  state.fontSize = v;
-  previewSizeLabel.textContent = v + 'px';
+wireSlider('fontSizeA',      'fontSizeAVal',      v => v + 'px', v => {
+  state.fontSizeA = v;
+  previewSizeLabel.textContent = state.fontSizeA + 'px / ' + state.fontSizeB + 'px';
   applyPreviewStyles();
 });
-wireSlider('fontWeight',    'fontWeightVal',    v => String(v), v => {
-  state.fontWeight = v;
+wireSlider('fontSizeB',      'fontSizeBVal',      v => v + 'px', v => {
+  state.fontSizeB = v;
+  previewSizeLabel.textContent = state.fontSizeA + 'px / ' + state.fontSizeB + 'px';
   applyPreviewStyles();
 });
-wireSlider('lineHeight',    'lineHeightVal',    v => (v/100).toFixed(2), v => {
-  state.lineHeight = v / 100;
+wireSlider('fontWeightA',    'fontWeightAVal',    v => String(v), v => {
+  state.fontWeightA = v;
   applyPreviewStyles();
 });
-wireSlider('letterSpacing', 'letterSpacingVal', v => (v/100).toFixed(2) + 'em', v => {
-  state.letterSpacing = v / 100;
+wireSlider('fontWeightB',    'fontWeightBVal',    v => String(v), v => {
+  state.fontWeightB = v;
+  applyPreviewStyles();
+});
+wireSlider('lineHeightA',    'lineHeightAVal',    v => (v/100).toFixed(2), v => {
+  state.lineHeightA = v / 100;
+  applyPreviewStyles();
+});
+wireSlider('lineHeightB',    'lineHeightBVal',    v => (v/100).toFixed(2), v => {
+  state.lineHeightB = v / 100;
+  applyPreviewStyles();
+});
+wireSlider('letterSpacingA', 'letterSpacingAVal', v => (v/100).toFixed(2) + 'em', v => {
+  state.letterSpacingA = v / 100;
+  applyPreviewStyles();
+});
+wireSlider('letterSpacingB', 'letterSpacingBVal', v => (v/100).toFixed(2) + 'em', v => {
+  state.letterSpacingB = v / 100;
   applyPreviewStyles();
 });
 wireSlider('opacityA', 'opacityAVal', v => v + '%', v => {
@@ -616,7 +693,9 @@ wireSlider('opacityB', 'opacityBVal', v => v + '%', v => {
 });
 
 /* Select / color wiring */
-['fontStyle','textTransform','fontVariant','textAlign','blendMode'].forEach(id => {
+['fontStyleA','textTransformA','fontVariantA','textAlignA',
+ 'fontStyleB','textTransformB','fontVariantB','textAlignB',
+ 'blendMode'].forEach(id => {
   $(id).addEventListener('change', e => {
     state[id] = e.target.value;
     applyPreviewStyles();
@@ -670,8 +749,45 @@ swapBtn.addEventListener('click', () => {
   const tmpFamily = state.fontFamilyA;
   state.fontFamilyA = state.fontFamilyB;
   state.fontFamilyB = tmpFamily;
+
+  // Swap per-font typography state
+  const typographyKeys = ['fontSizeA','fontWeightA','lineHeightA','letterSpacingA',
+                          'fontStyleA','textTransformA','fontVariantA','textAlignA'];
+  typographyKeys.forEach(keyA => {
+    const keyB = keyA.replace(/A$/, 'B');
+    const tmp = state[keyA];
+    state[keyA] = state[keyB];
+    state[keyB] = tmp;
+  });
+
+  // Sync slider/select DOM elements to swapped state
+  [
+    ['fontSizeA',      'fontSizeAVal',      v => v + 'px',                  state.fontSizeA,      state.fontSizeA * 1],
+    ['fontSizeB',      'fontSizeBVal',      v => v + 'px',                  state.fontSizeB,      state.fontSizeB * 1],
+    ['fontWeightA',    'fontWeightAVal',    v => String(v),                 state.fontWeightA,    state.fontWeightA],
+    ['fontWeightB',    'fontWeightBVal',    v => String(v),                 state.fontWeightB,    state.fontWeightB],
+    ['lineHeightA',    'lineHeightAVal',    v => v.toFixed(2),              state.lineHeightA,    Math.round(state.lineHeightA * 100)],
+    ['lineHeightB',    'lineHeightBVal',    v => v.toFixed(2),              state.lineHeightB,    Math.round(state.lineHeightB * 100)],
+    ['letterSpacingA', 'letterSpacingAVal', v => v.toFixed(2) + 'em', state.letterSpacingA, Math.round(state.letterSpacingA * 100)],
+    ['letterSpacingB', 'letterSpacingBVal', v => v.toFixed(2) + 'em', state.letterSpacingB, Math.round(state.letterSpacingB * 100)],
+  ].forEach(([sliderId, valId, fmt, displayVal, sliderVal]) => {
+    $(sliderId).value = sliderVal;
+    $(valId).textContent = fmt(displayVal);
+  });
+  [
+    ['fontStyleA',      state.fontStyleA],
+    ['textTransformA',  state.textTransformA],
+    ['fontVariantA',    state.fontVariantA],
+    ['textAlignA',      state.textAlignA],
+    ['fontStyleB',      state.fontStyleB],
+    ['textTransformB',  state.textTransformB],
+    ['fontVariantB',    state.fontVariantB],
+    ['textAlignB',      state.textAlignB],
+  ].forEach(([id, val]) => { $(id).value = val; });
+
   nameAEl.textContent = 'Font A';
   nameBEl.textContent = 'Font B';
+  previewSizeLabel.textContent = state.fontSizeA + 'px / ' + state.fontSizeB + 'px';
   applyPreviewStyles();
 });
 
@@ -851,22 +967,22 @@ loadBtn.addEventListener('click', async () => {
 /* ─────────────────────────────────────────────────────────────
    Preview rendering
 ───────────────────────────────────────────────────────────── */
-function sharedTextStyle() {
+function textStyleFor(suffix) {
   return {
-    fontSize:      state.fontSize + 'px',
-    fontWeight:    state.fontWeight,
-    lineHeight:    state.lineHeight,
-    letterSpacing: state.letterSpacing + 'em',
-    fontStyle:     state.fontStyle,
-    textTransform: state.textTransform,
-    fontVariant:   state.fontVariant,
-    textAlign:     state.textAlign,
+    fontSize:      state['fontSize'  + suffix] + 'px',
+    fontWeight:    state['fontWeight' + suffix],
+    lineHeight:    state['lineHeight' + suffix],
+    letterSpacing: state['letterSpacing' + suffix] + 'em',
+    fontStyle:     state['fontStyle'    + suffix],
+    textTransform: state['textTransform' + suffix],
+    fontVariant:   state['fontVariant'  + suffix],
+    textAlign:     state['textAlign'    + suffix],
   };
 }
 
 function applyStyle(el, extra) {
-  const s = sharedTextStyle();
-  Object.assign(el.style, s, extra);
+  // extra already contains per-font typography + fontFamily/color/opacity
+  Object.assign(el.style, extra);
 }
 
 /** Build a CSS font-family value with a safe serif fallback. */
@@ -875,26 +991,24 @@ function fontFamilyValue(name) {
 }
 
 function applyPreviewStyles() {
-  const shared = sharedTextStyle();
-
-  // sizer (invisible, drives container height)
-  Object.assign(previewSizerEl.style, shared, { fontFamily: fontFamilyValue(state.fontFamilyA) });
+  // sizer (invisible, drives container height) — use Font A's settings
+  Object.assign(previewSizerEl.style, textStyleFor('A'), { fontFamily: fontFamilyValue(state.fontFamilyA) });
 
   // overlay A
-  applyStyle(previewAEl, {
-    fontFamily:  fontFamilyValue(state.fontFamilyA),
-    color:       state.colorA,
-    opacity:     state.opacityA,
+  applyStyle(previewAEl, Object.assign(textStyleFor('A'), {
+    fontFamily:   fontFamilyValue(state.fontFamilyA),
+    color:        state.colorA,
+    opacity:      state.opacityA,
     mixBlendMode: state.blendMode,
-  });
+  }));
 
   // overlay B
-  applyStyle(previewBEl, {
-    fontFamily:  fontFamilyValue(state.fontFamilyB),
-    color:       state.colorB,
-    opacity:     state.opacityB,
+  applyStyle(previewBEl, Object.assign(textStyleFor('B'), {
+    fontFamily:   fontFamilyValue(state.fontFamilyB),
+    color:        state.colorB,
+    opacity:      state.opacityB,
     mixBlendMode: state.blendMode,
-  });
+  }));
 
   previewEl.style.background = state.bgColor;
 }
